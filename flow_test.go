@@ -6,6 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// There are multiple orders possible to complete the test.
+// I have asserted response with the order which the code will return
 func TestGraph(t *testing.T) {
 	t.Run("cyclic dependency", func(t *testing.T) {
 		resp, err := orderOfCourses(6, [][]int{
@@ -37,13 +39,13 @@ func TestGraph(t *testing.T) {
 		assert.Equal(t, []int{0, 2, 1, 3}, resp)
 		assert.Equal(t, nil, err)
 	})
-	t.Run("Example 2", func(t *testing.T) {
+	t.Run("Example 3", func(t *testing.T) {
 		resp, err := orderOfCourses(1, [][]int{})
 
 		assert.Equal(t, []int{0}, resp)
 		assert.Equal(t, nil, err)
 	})
-	t.Run("hard test", func(t *testing.T) {
+	t.Run("random test", func(t *testing.T) {
 		resp, err := orderOfCourses(10, [][]int{
 			{1, 0},
 			{5, 1},
@@ -53,10 +55,11 @@ func TestGraph(t *testing.T) {
 			{2, 6},
 			{7, 6},
 			{8, 7},
+			{8, 3},
 			{9, 7},
 		})
 
-		assert.Equal(t, []int{6, 7, 9, 8, 0, 2, 3, 4, 1, 5}, resp)
+		assert.Equal(t, []int{6, 7, 9, 0, 2, 3, 8, 4, 1, 5}, resp)
 		assert.Equal(t, nil, err)
 	})
 }

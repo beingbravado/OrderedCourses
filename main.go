@@ -1,44 +1,33 @@
 package main
 
-import "github.com/pingcap/errors"
+import (
+	"fmt"
+)
 
-var completedCourses map[int]bool
+func main() {
+	fmt.Println("Enter the number of courses: ")
+	var n int
+	fmt.Scanln(&n)
+	fmt.Println("Enter the size of prereqs array: ")
+	var m int
+	fmt.Scanln(&m)
 
-func orderOfCourses(n int, prereqs [][]int) ([]int, error) {
-	g := NewGraph()
-
-	var res []int
-	var visited []bool
-	completedCourses = map[int]bool{}
-
-	// creating graph for the courses and initializing the values
-	for i := 0; i < n; i++ {
-		visited = append(visited, false)
-		g.AddNode(i)
+	fmt.Println("Enter prereqs array: ")
+	fmt.Printf("Enter enter the course and its dependent course: ex. 2 4")
+	var prereqs = [][]int{}
+	for i := 0; i < m; i++ {
+		var x, y int
+		fmt.Scanf("%d %d", &x, &y)
+		prereqs = append(prereqs, []int{x, y})
 	}
-	for _, edge := range prereqs {
-		g.AddEdge(edge[1], edge[0])
-	}
 
-	for i := 0; i < n; i++ {
-		if !visited[i] {
-			path, err := traverse(g.nodes[i], visited)
-			if err != nil {
-				return []int{}, errors.Wrap(err, "cannot find the sequence")
-			}
-
-			res = append(res, path...)
+	fmt.Printf("Here is the sequence in which you should complete your course")
+	sol, err := orderOfCourses(n, prereqs)
+	if err != nil {
+		print(err.Error())
+	} else {
+		for _, value := range sol {
+			fmt.Printf("- %d\n", value)
 		}
 	}
-
-	return reverseArray(res), nil
-}
-
-func reverseArray(array []int) []int {
-	n := len(array)
-	var resp []int
-	for i := range array {
-		resp = append(resp, array[n-1-i])
-	}
-	return resp
 }
